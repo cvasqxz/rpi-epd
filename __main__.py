@@ -1,6 +1,7 @@
 import epd1in54
 import time
 from PIL import Image, ImageDraw, ImageFont
+from urllib.parse import urlencode, quote
 import qr
 
 
@@ -46,10 +47,20 @@ def main():
     epd.delay_ms(2000)
 
     epd.init(epd.lut_full_update)
+
     image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 255)
     
-    qr = qrcode.QRCode(box_size=1, version=1, border=1)
-    qr.add_data('bitcoin:1NbfaaU4TM39uWJ5nh3Raze4LAAncEV8E2?amount=0.12213&label=pago%20weaita&message=kekeke')
+    qr = qrcode.QRCode(box_size=1, version=1, border=2)
+
+    URI = {'label' : "La tiendita de la Chauchita",
+        'message' : "1x Chocolito",
+        'address' : "1NbfaaU4TM39uWJ5nh3Raze4LAAncEV8E2",
+        'amount' : 0.153
+        }
+        
+    URI = urlencode(URI,quote_via=quote)
+    print(URI)
+    qr.add_data(URI)
     qr.make()
     qr_img = qr.make_image().resize(((EPD_WIDTH, EPD_HEIGHT)), Image.ANTIALIAS)
 
