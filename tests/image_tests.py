@@ -6,7 +6,6 @@ import qrcode
 EPD_HEIGHT = EPD_WIDTH = 200
 
 def main():
-    
     image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 255)
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype('../fonts/Comfortaa-Light.ttf', 12)
@@ -39,22 +38,12 @@ def main():
 
     image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 255)
     
-    qr = qrcode.QRCode(box_size=5, version=2, border=0)
-    qr.add_data('cokR7rKb3BT1BhGqiF35iCVFr5uJQ6AZ7Q')
+    qr = qrcode.QRCode(box_size=1, version=1, border=1)
+    qr.add_data('bitcoin:1NbfaaU4TM39uWJ5nh3Raze4LAAncEV8E2?amount=0.12213&label=pago%20weaita&message=kekeke')
     qr.make()
-    qr_img = qr.make_image()
+    qr_img = qr.make_image().resize(((EPD_WIDTH, EPD_HEIGHT)), Image.ANTIALIAS)
 
-    qr_x = int((EPD_WIDTH - qr_img.size[0])/2)
-
-    image.paste(qr_img, (qr_x, 18))
-
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype('../fonts/Share-TechMono.ttf', 22)
-    price = "90.12345678"
-
-    text_x = int((EPD_WIDTH - draw.textsize(price, font=font)[0])/2)
-    draw.text((text_x, 168), price, font= font, fill= 0)
-
+    image.paste(qr_img, (0,0))
     image.show()
 
 

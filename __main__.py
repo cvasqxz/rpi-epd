@@ -48,15 +48,12 @@ def main():
     epd.init(epd.lut_full_update)
     image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 255)
     
-    qr = qrcode.QRCode(box_size=6, version=1, border=0)
-    qr.add_data('cokR7rKb3BT1BhGqiF35iCVFr5uJQ6AZ7Q')
+    qr = qrcode.QRCode(box_size=1, version=1, border=1)
+    qr.add_data('bitcoin:1NbfaaU4TM39uWJ5nh3Raze4LAAncEV8E2?amount=0.12213&label=pago%20weaita&message=kekeke')
     qr.make()
-    qr_img = qr.make_image()
+    qr_img = qr.make_image().resize(((EPD_WIDTH, EPD_HEIGHT)), Image.ANTIALIAS)
 
-    qr_x = int((EPD_WIDTH - qr_img.size[0])/2)
-    qr_y = int((EPD_HEIGHT - qr_img.size[1])/2)
-
-    image.paste(qr_img, (qr_x, qr_y))
+    image.paste(qr_img, (0,0))
 
     epd.set_frame_memory(image, 0, 0)
     epd.display_frame()
