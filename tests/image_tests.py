@@ -6,6 +6,7 @@ import qrcode
 EPD_HEIGHT = EPD_WIDTH = 200
 
 def main():
+    
     image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 255)
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype('../fonts/Comfortaa-Light.ttf', 12)
@@ -38,15 +39,22 @@ def main():
 
     image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 255)
     
-    qr = qrcode.QRCode(box_size=6, version=1, border=0)
+    qr = qrcode.QRCode(box_size=5, version=2, border=0)
     qr.add_data('cokR7rKb3BT1BhGqiF35iCVFr5uJQ6AZ7Q')
     qr.make()
     qr_img = qr.make_image()
 
     qr_x = int((EPD_WIDTH - qr_img.size[0])/2)
-    qr_y = int((EPD_HEIGHT - qr_img.size[1])/2)
 
-    image.paste(qr_img, (qr_x, qr_y))
+    image.paste(qr_img, (qr_x, 18))
+
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype('../fonts/Share-TechMono.ttf', 22)
+    price = "90.12345678"
+
+    text_x = int((EPD_WIDTH - draw.textsize(price, font=font)[0])/2)
+    draw.text((text_x, 168), price, font= font, fill= 0)
+
     image.show()
 
 
