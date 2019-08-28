@@ -1,14 +1,13 @@
 import epd1in54
 import time
-#import Image
 from PIL import Image, ImageDraw, ImageFont
+
 
 def main():
     epd = epd1in54.EPD()
     epd.init(epd.lut_full_update)
 
-    # For simplicity, the arguments are explicit numerical coordinates
-    image = Image.new('1', (epd1in54.EPD_WIDTH, epd1in54.EPD_HEIGHT), 255)  # 255: clear the frame
+    image = Image.new('1', (epd1in54.EPD_WIDTH, epd1in54.EPD_HEIGHT), 255)
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype('anonymouspro.ttf', 24)
     draw.rectangle((0, 10, 200, 34), fill = 0)
@@ -30,30 +29,15 @@ def main():
 
     epd.delay_ms(2000)
 
-    # for partial update
     epd.init(epd.lut_partial_update)
     image = Image.open('monocolor.bmp')
-##
- # there are 2 memory areas embedded in the e-paper display
- # and once the display is refreshed, the memory area will be auto-toggled,
- # i.e. the next action of SetFrameMemory will set the other memory area
- # therefore you have to set the frame memory twice.
- ##     
+    image = image.resize(((epd1in54.EPD_WIDTH, epd1in54.EPD_HEIGHT)), Image.ANTIALIAS)
+
     epd.set_frame_memory(image, 0, 0)
     epd.display_frame()
     epd.set_frame_memory(image, 0, 0)
     epd.display_frame()
 
-    time_image = Image.new('1', (96, 32), 255)  # 255: clear the frame
-    draw = ImageDraw.Draw(time_image)
-    font = ImageFont.truetype('anonymouspro.ttf', 32)
-    image_width, image_height  = time_image.size
-    while (True):
-        # draw a rectangle to clear the image
-        draw.rectangle((0, 0, image_width, image_height), fill = 255)
-        draw.text((0, 0), time.strftime('%M:%S'), font = font, fill = 0)
-        epd.set_frame_memory(time_image.rotate(90), 80, 80)
-        epd.display_frame()
 
 if __name__ == '__main__':
     main()
