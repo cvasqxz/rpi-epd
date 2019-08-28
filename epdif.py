@@ -1,12 +1,17 @@
 import spidev
 import RPi.GPIO as GPIO
 import time
+import yaml
+
+
+with open("config.yml", 'r') as f:
+    cfg = yaml.load(f)
 
 # Pin definition
-RST_PIN         = 17
-DC_PIN          = 25
-CS_PIN          = 8
-BUSY_PIN        = 24
+RST_PIN = cfg['pinout']['RST_PIN']
+DC_PIN = cfg['pinout']['DC_PIN']
+CS_PIN = cfg['pinout']['CS_PIN']
+BUSY_PIN = cfg['pinout']['BUSY_PIN']
 
 # SPI device, bus = 0, device = 0
 SPI = spidev.SpiDev(0, 0)
@@ -33,5 +38,3 @@ def epd_init():
     SPI.max_speed_hz = 2000000
     SPI.mode = 0b00
     return 0;
-
-### END OF FILE ###
