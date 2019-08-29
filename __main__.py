@@ -2,7 +2,7 @@ import epd1in54
 import time
 from PIL import Image, ImageDraw, ImageFont
 from urllib.parse import urlencode, quote
-import qr
+import qrcode
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
 
     image = Image.new('1', (epd1in54.EPD_WIDTH, epd1in54.EPD_HEIGHT), 255)
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype('../fonts/Comfortaa-Light.ttf', 12)
+    font = ImageFont.truetype('fonts/Comfortaa-Light.ttf', 12)
 
     text = ['ABCČĆDĐEFGHIJKLMNOPQR',
             'SŠTUVWXYZŽabcčćdđefghijk',
@@ -48,21 +48,22 @@ def main():
 
     epd.init(epd.lut_full_update)
 
-    image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 255)
+    image = Image.new('1', (epd1in54.EPD_WIDTH, epd1in54.EPD_HEIGHT), 255)
     
     qr = qrcode.QRCode(box_size=1, version=1, border=2)
 
+    address = "1NbfaaU4TM39uWJ5nh3Raze4LAAncEV8E2"
+
     URI = {'label' : "La tiendita de la Chauchita",
         'message' : "1x Chocolito",
-        'address' : "1NbfaaU4TM39uWJ5nh3Raze4LAAncEV8E2",
         'amount' : 0.153
         }
         
     URI = urlencode(URI,quote_via=quote)
     print(URI)
-    qr.add_data(URI)
+    qr.add_data("bitcoin:%s?%s" % (address, URI))
     qr.make()
-    qr_img = qr.make_image().resize(((EPD_WIDTH, EPD_HEIGHT)), Image.ANTIALIAS)
+    qr_img = qr.make_image().resize(((epd1in54.EPD_WIDTH, epd1in54.EPD_HEIGHT)), Image.ANTIALIAS)
 
     image.paste(qr_img, (0,0))
 

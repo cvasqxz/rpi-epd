@@ -5,7 +5,7 @@ import yaml
 
 
 with open("config.yml", 'r') as f:
-    cfg = yaml.load(f)
+    cfg = yaml.load(f, Loader=yaml.FullLoader)
 
 # Pin definition
 RST_PIN = cfg['pinout']['RST_PIN']
